@@ -1,0 +1,60 @@
+<!--pages/zan/zan.wxml-->
+<view class="zan_container">
+  <!--列表项 -->
+  <view class="zan_item" wx:for="{{zan_list}}" wx:key="{{item._id}}">
+    <image src="{{item.headimg}}" class="headerimg"></image>
+
+    <view class="item_detail">
+      <view class="left">
+        <view class="p_name">{{item.name}}</view>
+        <view class="p_no">NO.{{item.no}}</view>
+      </view>
+      <view class="right">
+        <view class="p_time">17:27</view>
+        <view class="p_delete" bindtap="f_delete_zan" data-zid="{{item._id}}">删除</view>
+      </view>
+    </view>
+
+  </view>
+  <!--列表项结束-->
+
+
+  <!--列表项 -->
+  <!--<view class="zan_item" wx:for="{{zan_list}}" wx:key="*this">
+    <image src="/images/header.png" class="headerimg"></image>
+
+    <view class="item_detail">
+      <view class="left">
+        <view class="p_name">鹿晗鹿晗鹿晗鹿晗鹿晗鹿晗</view>
+        <view class="p_no">NO.999</view>
+      </view>
+      <view class="right">
+        <view class="p_time">05-01 10:30</view>
+        <view class="p_delete" bindtap="f_delete_zan" data-zid="{{item}}">删除</view>
+      </view>
+    </view>
+
+  </view>-->
+  <!--列表项结束 -->
+
+
+  <!--列表项 -->
+
+  <!--<view class="zan_item" wx:for="{{zan_list}}" wx:key="*this">
+    <image src="/images/header.png" class="headerimg"></image>
+
+    <view class="item_detail">
+      <view class="left">
+        <view class="p_name">鹿晗</view>
+        <view class="p_no">NO.2</view>
+      </view>
+      <view class="right">
+        <view class="p_time">2016-05-01</view>
+        <view class="p_delete" bindtap="f_delete_zan" data-zid="{{item}}">删除</view>
+      </view>
+    </view>
+
+  </view>-->
+  <!--列表项结束 -->
+
+</view>

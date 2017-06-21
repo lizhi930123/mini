@@ -1,0 +1,122 @@
+<!--pages/quanzi_xiaoxi/quanzi_xiaoxi.wxml-->
+<view class="xiaoxi_container">
+  <!--点赞区域-->
+  <view class="zan">
+    <view class="zan_info">
+      <image src=""></image>
+      <view class="zan_whotime">
+        <view class="zan_who">
+          <text>旋涡名人 赞了你</text>
+        </view>
+        <view class="zan_time">
+          <text>17:24</text>
+        </view>
+      </view>
+      <view class="zan_delete" bindtap="f_delete_xiaoxi">删除</view>
+    </view>
+    <view class="zan_post" bindtap="f_see_detail">
+      <image src="" class="zan_content_img"></image>
+      <view class="zan_content">
+        <text class="zan_author">宇智波佐助：</text>
+        <text>清都山水客，何事入临安。临安之地，自古山灵水秀，灵气充足。东三山，西有湖畔，百年来，灵气滋润,百年来，灵气滋润</text>
+      </view>
+    </view>
+    <image src="../../image/home/liked.png" class="zan_logo_img"></image>
+  </view>
+  <!--点赞区域结束-->
+  <!--评论区域开始-->
+  <view class="comment">
+    <view class="zan_info">
+      <image src=""></image>
+      <view class="zan_whotime">
+        <view class="zan_who">
+          <text>旋涡名人 评论了你</text>
+        </view>
+        <view class="zan_time">
+          <text>05-01 17:24</text>
+        </view>
+      </view>
+      <view class="zan_delete">删除</view>
+    </view>
+    <view class="comment_content">
+      <text>写的真好</text>
+    </view>
+    <view class="zan_post">
+      <image src="" class="zan_content_img"></image>
+      <view class="zan_content">
+        <text class="zan_author">宇智波佐助：</text>
+        <text>清都山水客，何事入临安。临安之地，自古山灵水秀，灵气充足。东三山，西有湖畔，百年来，灵气滋润,百年来，灵气滋润</text>
+      </view>
+    </view>
+    <image src="../../image/msg/comment.png" class="comment_logo_img"></image>
+  </view>
+  <!--评论区域结束-->
+  <!--回复区域开始-->
+  <view class="reply">
+    <view class="zan_info">
+      <image src=""></image>
+      <view class="zan_whotime">
+        <view class="zan_who">
+          <text>旋涡名人 回复了你</text>
+        </view>
+        <view class="zan_time">
+          <text>2016-05-01</text>
+        </view>
+      </view>
+      <view class="zan_delete">删除</view>
+    </view>
+    <view class="comment_content">
+      回复
+      <text class="reply_author"> 宇智波佐助：</text>
+      <text>多谢夸奖哈~我会一直坚持写戏的，希望大家多交流</text>
+    </view>
+    <view class="zan_post">
+      <image src="" class="zan_content_img"></image>
+      <view class="zan_content">
+        <text class="zan_author">宇智波佐助：</text>
+        <text>清都山水客，何事入临安。临安之地，自古山灵水秀，灵气充足。东三山，西有湖畔，百年来，灵气滋润,百年来，灵气滋润</text>
+      </view>
+    </view>
+    <image src="../../image/msg/reply.png" class="reply_logo_img"></image>
+  </view>
+  <!--回复区域结束-->
+
+  <!--回复区域开始-->
+  <view class="reply">
+    <view class="zan_info">
+      <image src=""></image>
+      <view class="zan_whotime">
+        <view class="zan_who">
+          <text>旋涡名人 回复了你</text>
+        </view>
+        <view class="zan_time">
+          <text>2016-05-01</text>
+        </view>
+      </view>
+      <view class="zan_delete">删除</view>
+    </view>
+    <view class="comment_content">
+      回复
+      <text class="reply_author"> 宇智波佐助：</text>
+      <text>多谢夸奖哈~我会一直坚持写戏的，希望大家多交流</text>
+    </view>
+    <view class="zan_post">
+      <image src="" class="zan_content_img"></image>
+      <view class="zan_content">
+        <text class="zan_author">宇智波佐助：</text>
+        <text>清都山水客，何事入临安。临安之地，自古山灵水秀，灵气充足。东三山，西有湖畔，百年来，灵气滋润,百年来，灵气滋润</text>
+      </view>
+    </view>
+    <image src="" class="reply_logo_img"></image>
+  </view>
+  <!--回复区域结束-->
+
+  
+</view>
+
+<!--<view class="vertical_line">
+    
+  </view>-->
+  <!--<image src="/images/zan.png" class="zan_logo_img"></image>
+    <image src="/images/comment.png" class="comment_logo_img"></image>
+    <image src="/images/reply.png" class="reply_logo_img"></image>-->

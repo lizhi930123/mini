@@ -1,0 +1,6 @@
+<view bindtap="checkimage" class="addimage">
+    <image src="{{imagesrc}}" class="addimgshow"></image>
+</view>
+<input class="groupname" placeholder="填写圈子名称（2-10个字" placeholder-style="color:#b2b2b2" maxlength="10" bindinput="checkval"/>
+<button class="quanzi_no" id="{{quanzi}}">创建圈子</button>
+<text class="tishi">一个用户只能创建一个圈子</text>

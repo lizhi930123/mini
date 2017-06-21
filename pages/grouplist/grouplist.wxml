@@ -1,0 +1,38 @@
+<!--pages/quanzi_list/quanzi_list.wxml-->
+<view class="quanzi_container">
+  <scroll-view scroll-y style="height: 1050rpx;">
+    <block wx:for="{{quanziList}}" wx:key="{{index}}">
+      <!--item开始 -->
+      <view class="quanzi_item" bindtap="f_join_quanzi" data-qid="{{item.qid}}">
+        <image src="" class="headerimg"></image>
+        
+        <!--如果是我的圈子的话-->
+        <view class="quanzi_wrapper" wx:if="{{item.isMy}}">
+          <view><text>{{item.quanzi_name}}</text></view>
+          <view class="my_quanzi">我的圈子</view>
+        </view>
+
+        <!--不是我的圈子的话-->
+        <view class="quanzi_wrapper" wx:else>
+          <view class="quanzi_name">{{item.quanzi_name}}</view>
+        </view>
+
+        <!--消息数量小于100的话-->
+        <view class="xiaoxi_num" wx:if="{{item.msgNum < 100}}">{{item.msgNum}}</view>
+        <!--消息数量大于等于100-->
+        <view class="xiaoxi_num jiujiu" wx:else>99+</view>
+      </view>
+      <!--item结束 -->
+
+      
+
+    </block>
+  </scroll-view>
+
+  <!--创建圈子-->
+  <view class="create_quanzi">
+    <button type="primary" class="create_quanzi_btn">创建圈子</button>
+  </view>
+  <!--创建圈子结束-->
+
+</view>

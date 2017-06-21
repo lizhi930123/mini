@@ -1,0 +1,71 @@
+<!--功能球-->
+<view class="ball">
+    <image src="../../image/home/ball.png" bindtap="show_ball_func"></image>
+</view>
+<!--功能菜单-->
+<view class="ball_func" wx:if="{{ball_func}}" bindtap="hide_ball_func">
+    <image src="../../image/home/ball.png" catchtap></image>
+    <view class="fatie"><image src="../../image/home/fatie.png" bindtap="check_publish"></image></view>
+    <view class="quanzi"><image src="../../image/home/quanzi.png"></image></view>
+    <view class="dongtai"><image src="../../image/home/dongtai.png"></image></view>
+</view>
+<!--评论框-->
+<view class="word_input" wx:if="{{word_input}}">
+    <view class="jss_brs">
+        <view bindtap="check_play" class="{{self?'':'active'}}">角色说</view>
+        <view bindtap="check_self" class="{{self?'active':''}}">本人说</view>
+    </view>
+    <input type="text" bindinput="check_val" value="{{val}}" placeholder="{{reply_name}}" placeholder-style="color:#b2b2b2"/>
+    <view class="sure_comment" bindtap="reply">回复</view>
+</view>
+<!--帖子容器-->
+<scroll-view scroll-y enable-back-to-top lower-threshold="50" bindscrolltolower="get_more_items" class="container" bindtap="close_word">
+    <view class="bg">
+        <view class="user">
+            <image src="{{current_user.headimg}}"></image>
+            <text>{{current_user.name}}</text>
+        </view>
+    </view>
+    <block wx:for="{{items}}">
+        <view class="item_container">
+            <image src="{{item.user.headimg}}" class="item_headimg"></image>
+            <!--帖子容器-->
+            <view class="item_box">
+                <text class="item_name">{{item.user.name}}</text>
+                <!--帖子内容-->
+                <scroll-view scroll-y class="item_content">{{item.content}}</scroll-view>
+                <!--查看全文-->
+                <text class="check_more">查看全文</text>
+                <!--图片-->
+                <view class="photo_list">
+                    <image wx:for="{{item.photos}}" wx:for-index="sindex" wx:for-item="sitem" src="{{sitem.thumbnail}}" data-index="{{index}}" data-sindex="{{sindex}}" bindtap="showimg"></image>
+                </view>
+                <!--时间、点赞、评论-->
+                <view class="func_but">
+                    <text class="time">{{item.time.create}}</text>
+                    <image src="../../image/home/comment.png" class="comment" catchtap="get_word" data-index="{{index}}"></image>
+                    <image src="{{item.liked?'../../image/home/liked.png':'../../image/home/like.png'}}" class="liked" bindtap="f_like" data-index="{{index}}"></image>
+                </view>
+                <view class="line"></view>
+                <!--点赞列表-->
+                <view class="likeuser_list" wx:if="{{item.likeusers.length}}">
+                    <text class="zan">赞</text>
+                    <view class="likeusers">
+                        <image wx:for="{{item.likeusers}}" wx:for-index="sindex" wx:for-item="sitem" src="{{sitem.headimg}}"></image>
+                    </view>
+                    <image src="../../image/home/more.png" class="liked_more"></image>
+                </view>
+                <!--评论列表-->
+                <view class="comment_list">
+                    <view wx:for="{{item.comments}}" wx:for-index="sindex" wx:for-item="sitem" class="comment_item" catchtap="reply_someone" data-index="{{index}}" data-sindex="{{sindex}}">
+                        <text class="comment_content">
+                            <text class="{{sitem.user.me?'comment_name me':'comment_name'}}" wx:if="{{!sitem.b}}">{{sitem.user.name}}</text>
+                            <text class="{{sitem.user.me?'comment_name me':'comment_name'}}" wx:else>{{sitem.user.name}}<text>本人说</text></text><text id="{{sitem.replyuser.me?'reply_user_active':'reply_user'}}" wx:if="{{sitem.replyuser}}"><text>回复</text>{{sitem.replyuser.name}}</text>：{{sitem.content}}</text>
+                    </view>
+                <!--查看全部评论-->
+                    <text class="more_comment" data-id="{{item._id}}" data-index="{{index}}" wx:if="{{item.stat.comment>item.comments.length}}" catchtap="get_all_comments">查看全部{{item.stat.comment}}条评论</text>
+                </view>
+            </view>
+        </view>
+    </block>
+</scroll-view>

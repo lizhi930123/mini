@@ -1,0 +1,24 @@
+{
+  "pages":[
+    "pages/home/home",
+    "pages/publish/publish",
+    "pages/grouplist/grouplist",
+    "pages/msg/msg",
+    "pages/likelist/likelist",
+    "pages/details/details",
+    "pages/creategroup/creategroup",
+    "pages/search/search",
+    "pages/index/index",
+    "pages/mainpage/mainpage"
+    
+  ],
+  "window":{
+    "backgroundTextStyle":"light",
+    "navigationBarBackgroundColor": "#000",
+    "navigationBarTitleText": "名朋角色扮演",
+    "navigationBarTextStyle":"#fff",
+    "enablePullDownRefresh":true,
+    "backgroundColor":"#fff"
+  }
+  
+}

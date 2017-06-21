@@ -1,0 +1,43 @@
+<!--index.wxml-->
+<view class="container">
+<view class="search">
+      <view class="go_search" bindtap="f_focus">搜索你想扮演的名人</view>
+</view>
+<view class="content"  hidden="{{content_active}}">
+      <scroll-view scroll-y class="left">
+      <block wx:for="{{array}}">
+      <view class="{{active[index]}}" data-index="{{index}}" bindtap="check_white">
+            {{item}}
+      </view>
+      </block>
+      </scroll-view>
+      <scroll-view scroll-y class="right">
+      <block wx:for="{{items}}">
+            <view class="right_item" class="info_list">
+                  <view class="info_item">
+                        <image src="{{item.headimg}}"></image>
+                        <view class="info_content">
+                              <text>{{item.name}}</text>
+                              <text>{{item.description}}</text>
+                        </view>
+                        <text class="act_he" data-name="{{item.name}}" data-description="{{item.description}}" data-headimg="{{item.headimg}}" bindtap="go_act">扮演TA</text>
+                  </view>
+            </view>
+      </block>
+      </scroll-view>
+</view>
+<view class="check_actname" wx:if="{{actinfo.name}}">
+      <view class="act_content">
+            <image src="{{actinfo.headimg}}" class="act_headimg"></image>
+            <text class="act_name">{{actinfo.name}}</text>
+            <scroll-view scroll-y class="act_description">{{actinfo.description}}</scroll-view>
+            <text class="tuijian_headimg">推荐头像</text>
+            <scroll-view scroll-x class="headimg_items">
+            </scroll-view>
+            <view class="act_button">
+                  <button bindtouchstart="startcancel" bindtouchend="overcancel" class="{{cancelactive}}" bindtap="cancelact">取消</button>
+                  <button bindtouchstart="startsure" bindtouchend="oversure"  class="{{sureactive}}" bindtap="sureact">确定</button>
+            </view>
+      </view>
+</view>
+</view>

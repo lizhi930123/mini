@@ -1,0 +1,11 @@
+<view class="container">
+    <block wx:for="{{items}}">
+    <view class="user_info">
+         <image src="{{item.user.headimg}}" class="user_headimg"></image>
+         <view class="user_container">
+            <view class="user_name">{{item.user.name}}</view>
+            <view class="user_content">{{item.content}}</view>
+         </view>
+    </view>  
+    </block>
+</view>
