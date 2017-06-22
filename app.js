@@ -3,7 +3,13 @@ App({
   data:{
     items:[],
     item:false,
-    url:'http://test.mrpyq.com/api/'
+    url:'http://test.mrpyq.com/api/',
+
+
+    // 点击查看详情details, 点赞记录和评论内容 同步到home页
+    detail_index:-1,
+    comments: [],
+    likeduser:null
   },
   onLaunch: function () {
     //调用API从本地缓存中获取数据
@@ -67,6 +73,7 @@ App({
 			}
 			return result;
 	},
+  // 将items数组中的 time.create修改成相对于newTime的相对日期 几天前或者几小时前
   checktime:function(items,app,newTime){
         for(var i=0;i<items.length;i++){
             items[i].time.create=app.cheTime(items[i].time.create,newTime);

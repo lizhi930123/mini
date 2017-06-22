@@ -7,18 +7,25 @@ Page({
    */
   data: {
 
+    // 当前帖子 在home主页中帖子数组中的索引index
+    index:-1,
 
     current_user: {
-      name: 'dengchao',
-      headimg: 'http://7x2wk4.com2.z0.glb.qiniucdn.com/Fi0cblQY3pt2sAmWjxUdYq-wYBhv-head'
+      name: '折原临也',
+      _id: '551d812efbe78e6ec27b1049',
+      no: 230,
+      me: true,
+      headimg: 'http://7x2wk4.com2.z0.glb.qiniucdn.com/Fq6Uxh4S3SkNlEcAEsTLPs08QlcW-head'
     },
+    token: '58252d066e998f6bfd67f783.1528192546.4fd5cb6689941ed91bcd3d575121eb5d',
     // 该篇文章的评论
     items: [],
+
     //文章详细信息
     feed: {},
+
     //评论的数量  因为要收缩起来
     count: 0,
-
 
     // input样式
     self: false,
@@ -35,23 +42,9 @@ Page({
     liked: false,
 
     // 是否显示评论输入框
-    inputHidden: true,
-
-    //该文章的图片
-    imgUrls: ["http://img1.gtimg.com/chinanba/pics/hv1/173/81/2216/144116228.jpg",
-      "http://pic.baike.soso.com/p/20120912/20120912190856-1094836003.jpg",
-      "http://08.imgmini.eastday.com/mobile/20170526/20170526151756_19cd499d922429620fbabfe4dd404ca1_1.jpeg",
-      "http://pic.baike.soso.com/p/20140304/20140304160014-595174499.jpg",
-      "http://mat1.gtimg.com/chinanba/web/statics/zt_mvp_2c2127.jpg",
-      "http://05.imgmini.eastday.com/mobile/20170602/20170602121617_bd456093b3f9f8dff43476f5a2fe30b7_1.jpeg",
-      "http://00.imgmini.eastday.com/mobile/20170611/20170611203504_53b251953cf9fab6de1dfd53c62dc0fc_1.jpeg",
-      "http://ww1.sinaimg.cn/bmiddle/dad5bf5dgw1exv0462xumg20b406d4qp.jpg",
-      "http://imgsports.eastday.com/sports/img/201705261112431649.jpeg",
-      "http://pic2.qiyipic.com/common/lego/20170613/a58b9fbb3cb14a08a1d358602ebdac6d.jpg"
-
-    ]
+    inputHidden: true
   },
-  loadMoreData: function() {
+  loadMoreData: function () {
     console.log('load more')
 
   },
@@ -60,14 +53,11 @@ Page({
     var that = this;
     if (!that.data.val) {
       wx.showToast({
-        title: '内容不能为空',
-        icon: 'warning',
-        image: '/images/closeBtn.png',
-        duration: 1000,
-        mask: true,
-        success: function (res) { },
-        fail: function (res) { },
-        complete: function (res) { },
+        title: '请输入评论内容',
+        icon: 'success',
+        image: '',
+        duration: 2000,
+        mask: true
       })
       return;
     }
@@ -85,22 +75,68 @@ Page({
       }
     };
 
-    // 回复个人还是文章 判断
-
+    var data = {
+      access_token: that.data.token,
+      userid: that.data.current_user._id,
+      id: that.data.feed._id,
+      content: that.data.val,
+      b: that.data.self ? 1 : 0,
+      replyuserid: "",
+    };
+    // 回复个人还是文章
     if (reply_user) { //表示回复某人
-      console.log("回复用户:", this.data.val);
-      console.log(reply_user)
+      //console.log("回复用户:");
+      //console.log(reply_user)
+      data.replyuserid = reply_user._id;
     } else { //表示回复文章主人
-      console.log("回复文章:" + this.data.feed._id, this.data.val);
+      //console.log("回复文章:" + this.data.feed._id, this.data.val);
+      data.replyuserid = "";
     }
+    console.log(data)
+    wx.request({
+      url: app.data.url + 'feed/comment',
+      data: data,
+      method: 'get',
+      dataType: 'json',
+      success: function (res) {
+        console.log(res);
+        wx.showToast({
+          title: '评论成功',
+          icon: 'success',
+          image: '',
+          duration: 2000,
+          mask: true,
+        });
 
-    var items = this.data.items.slice();
-    items.unshift(item);
-    that.setData({
-      items: items,
-      val: '',
-      word_input: false,
+        // 数据存入数组
+        var items = that.data.items.slice();
+        items.unshift(item);
+        // 重置部分数据
+        that.setData({
+          items: items,
+          val: '',
+          word_input: false,
+        })
+
+        // 同步评论记录到home主页中
+        app.data.detail_index = that.data.index;
+        app.data.comments.push(res.data.comment)
+        //console.log(app.data.comments)
+
+      },
+      fail: function (res) {
+        wx.showToast({
+          title: '评论失败, 请稍后再试',
+          icon: 'success',
+          image: '',
+          duration: 2000,
+          mask: true,
+        });
+      },
+      complete: function (res) { },
     })
+
+
 
   },
   // 发表评论时的数据绑定
@@ -124,7 +160,6 @@ Page({
     })
   },
 
-
   // 隐藏评论框input
   f_hide_commnetInput: function () {
     this.data.inputHidden = false;
@@ -132,41 +167,56 @@ Page({
       word_input: false
     })
   },
-  f_delete_post: function () {
+  // 删帖操作 (只能删除自己的帖子)
+  f_delete_post: function (event) {
+    var feed_id = event.currentTarget.dataset.feedid;
+    var that = this;
     wx.showModal({
       title: '删除提示',
       content: '确定删除该动态?',
       showCancel: true,
       cancelText: '取消',
-      cancelColor: 'red',
+      cancelColor: 'green',
       confirmText: '确定删除',
-      confirmColor: 'green',
+      confirmColor: 'red',
       success: function (res) {
         if (res.confirm) {
           //删除该动态
           console.log("删除该动态")
           wx.showLoading({
             title: '删除动态中',
-            mask: true,
-            success: function (res) { },
-            fail: function (res) { },
-            complete: function (res) { },
+            mask: true
           })
-          // 处理删除的网络请求
-          setTimeout(function () {
+          wx.request({
+            url: app.data.url + 'feed/delete',
+            data: {
+              access_token: that.data.token,
+              id: feed_id
+            },
+            method: 'get',
+            success: function (res) {
+              //wx.hideLoading();
+              //console.log(res.data)
 
-            wx.hideLoading();
-            wx.showToast({
-              title: '删除成功',
-              icon: 'success',
-              image: '',
-              duration: 1000,
-              mask: true,
-              success: function (res) { },
-              fail: function (res) { },
-              complete: function (res) { },
-            })
-          }, 2000)
+              wx.showToast({
+                title: '删除成功',
+                icon: 'success',
+                duration: 2000,
+              })
+              wx.reLaunch({
+                url: '../../pages/home/home',
+              })
+
+            },
+            fail: function () {
+              wx.showToast({
+                title: '删除失败',
+                icon: 'success',
+                duration: 2000
+              })
+            }
+          })
+
         } else if (res.cancel) {
           //取消操作
           console.log("你取消删除该动态")
@@ -182,17 +232,73 @@ Page({
     var jsonString = JSON.stringify(likeusers);
     wx.navigateTo({
       url: '../zan/zan?likeusers=' + jsonString,
-      success: function (res) { },
-      fail: function (res) { },
-      complete: function (res) { }
     })
   },
+
   // 点击点赞图标
-  f_change_like: function () {
-    var liked = !this.data.liked;
-    this.setData({
-      liked: liked
-    });
+  f_change_like: function (event) {
+    var that = this;
+    var feed_id = event.currentTarget.dataset.feedid;
+    wx.request({
+      url: app.data.url + 'feed/like',
+      data: {
+        access_token: that.data.token,
+        userid: that.data.current_user._id,
+        id: feed_id,
+        no: that.data.current_user.no
+      },
+      method: 'GET',
+      success: function (res) {
+        console.log(res.data)
+        var liked = false;
+        if (res.data.result == 1) {
+          wx.showToast({
+            title: '点赞成功',
+            icon: 'success',
+            duration: 2000
+          })
+          liked = true;
+          that.data.feed.likeusers.unshift(that.data.current_user)
+        } else {
+          wx.showToast({
+            title: '取消点赞',
+            icon: 'success',
+            duration: 2000
+          })
+          liked = false
+          //删除当前用户的点赞数据
+          var length = that.data.feed.likeusers.length
+          for (var i = 0; i < length; i++) {
+            if (that.data.current_user._id == that.data.feed.likeusers[i]._id) {
+              that.data.feed.likeusers.splice(i, 1);
+              break;
+            }
+          }
+          
+        }
+
+        // 将当前用户添加到点赞的用户列表中  点赞图像使用
+
+        that.setData({
+          liked: liked,
+          feed:that.data.feed
+        });
+        
+        // 同步点赞记录到home主页中
+        app.data.detail_index = that.data.index;
+        app.data.likeduser = {
+          // 点赞用户
+          // current_user:that.data.current_user,
+
+          liked,
+
+          changed:true
+        }
+        
+
+      }
+    })
+
   },
   // 点击评论图标
   f_comment_icon__click: function (event) {
@@ -202,40 +308,64 @@ Page({
     var reply_name = reply_user ? "回复: " + reply_user.name : '发表评论';
     this.setData({ word_input: true, reply_user: reply_user, reply_name: reply_name });
   },
+
   // 点击图片预览图片
   f_preview_img: function (event) {
-    console.log(event.target.dataset.imgurl)
-    var urlArr = this.data.imgUrls;
-    var imgurl = event.target.dataset.imgurl;
+    console.log(event.target.dataset.index)
+    //var urlArr = this.data.imgUrls;
+    console.log(this.data.feed);
+
+    // 表示要预览的图片的索引id
+    var index = event.target.dataset.index;
+
+    // 当前要预览的图片
+    var imgurl = this.data.feed.photos[index].large;
+
+    // 表示全部图片的集合 做全部预览使用
+    var photosArr = [];
+
+    var phtLength = this.data.feed.photos.length;
+
+    for (var i = 0; i < phtLength; i++) {
+      photosArr.push(this.data.feed.photos[i].large);
+    }
+
+    //console.log(photosArr)
+
     wx.previewImage({
       current: imgurl,
-      urls: urlArr,
+      urls: photosArr,
       success: function (res) { },
       fail: function (res) { },
       complete: function (res) { },
     })
   },
-  // 点击球
-  /*
-  f_change_showState: function () {
-    var state = this.data.btnShowState;
-    this.data.btnShowState = !state;
-    // this.setData({ btnShowState: !state });
-
-    this.setData({
-      btnShowState: !state
-    })
-  },*/
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
     var that = this;
+    var feed_id = options.feed_id;
+
+    // 该贴相对于items数组的索引
+    var index = options.index;
+
+    if (!feed_id) {
+      wx.showToast({
+        title: '数据加载失败',
+        icon: 'success',
+        image: '',
+        duration: 1000,
+        mask: true,
+      })
+      return;
+    }
+    //console.log("DetailPage", feed_id)
     wx.request({
-      url: 'http://test.mrpyq.com/api/feed/comments_by_feed',
+      url: app.data.url + '/feed/comments_by_feed',
       data: {
-        access_token: '58252d066e998f6bfd67f783.1527755207.64686c25246c2232e1a2ba1597f42b89',
-        id: '58292fee6e998f2100a42a9e'
+        access_token: that.data.token,
+        id: feed_id
       },
       header: {
         'content-type': 'application/json'
@@ -247,10 +377,15 @@ Page({
         var data = res.data;
 
         that.data.items = data.items;
+
+        that.data.items.reverse();
+
         that.data.feed = data.feed;
         that.data.count = data.count;
+
         that.setData({
-          items: data.items,
+          index,
+          items: that.data.items,
           feed: data.feed,
           count: data.count,
           liked: data.feed.liked
@@ -259,16 +394,12 @@ Page({
       fail: function (res) {
         wx.showToast({
           title: '网络连接崩溃',
-          icon: 'error',
+          icon: 'success',
           image: '',
           duration: 1000,
-          mask: true,
-          success: function (res) { },
-          fail: function (res) { },
-          complete: function (res) { },
+          mask: true
         })
-      },
-      complete: function (res) { },
+      }
     })
   },
 

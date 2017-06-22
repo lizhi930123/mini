@@ -8,7 +8,7 @@
       <view class="p_name">
         <text>{{feed.user.name}}</text>
       </view>
-      <view class="delete_btn" bindtap="f_delete_post">
+      <view class="delete_btn" bindtap="f_delete_post" data-feedid="{{feed._id}}" wx:if="{{feed.user.me}}">
         <text>删除</text>
       </view>
     </view>
@@ -22,8 +22,8 @@
     <!-- 博文内容区域结束-->
     <!--博文图片区域-->
     <view class="img_area">
-      <block wx:for="{{imgUrls}}" wx:key="*this">
-        <image src="{{item}}" bindtap="f_preview_img" data-imgurl="{{item}}"></image>
+      <block wx:for="{{feed.photos}}" wx:key="*this">
+        <image src="{{item.thumbnail}}" bindtap="f_preview_img" data-index="{{index}}"></image>
       </block>
     </view>
     <!--博文图片区域结束-->
@@ -31,7 +31,7 @@
     <!--博文发表时间 赞评论图标-->
     <view class="time_comment">
       <text>{{feed.time.create}}</text>
-      <image src="{{liked?'../../image/home/liked.png':'../../image/home/like.png'}}" class="zan_img" bindtap="f_change_like"></image>
+      <image src="{{liked?'../../image/home/liked.png':'../../image/home/like.png'}}" class="zan_img" bindtap="f_change_like" data-feedid="{{feed._id}}"></image>
       <image src="../../image/home/comment.png" class="comment_img" catchtap="f_comment_icon__click" data-replyuser=""></image>
     </view>
     <!--博文发表时间 赞评论图标结束-->

@@ -27,6 +27,14 @@ Page({
     comments_pagemore: false,
     comments: []
   },
+  // 查看帖子详情
+  view_detail: function (event) {
+    var feed_id = event.target.dataset.feedid;
+    //console.log(feed_id)
+    wx.navigateTo({
+      url: '../../pages/details/details?feed_id=' + feed_id,
+    })
+  },
   //事件处理函数
   get_all_comments: function (event) {
     var i = 1, id = event.target.dataset.id, index = event.target.dataset.index;

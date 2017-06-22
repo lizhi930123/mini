@@ -7,9 +7,10 @@
     <input type="text" bindinput="check_val" value="{{val}}" placeholder="{{reply_name}}" placeholder-style="color:#b2b2b2"/>
     <view class="sure_comment" bindtap="reply">回复</view>
 </view>
+
 <!--帖子容器-->
 <scroll-view scroll-y enable-back-to-top lower-threshold="50" bindscrolltolower="get_more_items" class="container" bindtap="close_word">
-    <block wx:for="{{items}}">
+    <block wx:for="{{items}}" wx:key="{{item._id}}">
         <view class="item_container" style="margin-top:{{index==0?'0':'16rpx'}}">
             <image src="{{item.user.headimg}}" class="item_headimg"></image>
             <!--帖子容器-->
@@ -18,10 +19,10 @@
                 <!--帖子内容-->
                 <scroll-view scroll-y class="item_content">{{item.content}}</scroll-view>
                 <!--查看全文-->
-                <text class="check_more">查看全文</text>
+                <text class="check_more" bindtap="view_detail" data-feedid="{{item._id}}">查看全文</text>
                 <!--图片-->
                 <view class="photo_list">
-                    <image wx:for="{{item.photos}}" wx:for-index="sindex" wx:for-item="sitem" src="{{sitem.thumbnail}}" data-index="{{index}}" data-sindex="{{sindex}}" bindtap="showimg"></image>
+                    <image wx:for="{{item.photos}}" wx:key="{{index}}" wx:for-index="sindex" wx:for-item="sitem" src="{{sitem.thumbnail}}" data-index="{{index}}" data-sindex="{{sindex}}" bindtap="showimg"></image>
                 </view>
                 <!--时间、点赞、评论-->
                 <view class="func_but">
@@ -34,13 +35,13 @@
                 <view class="likeuser_list" wx:if="{{item.likeusers.length}}">
                     <text class="zan">赞</text>
                     <view class="likeusers">
-                        <image wx:for="{{item.likeusers}}" wx:for-index="sindex" wx:for-item="sitem" src="{{sitem.headimg}}"></image>
+                        <image wx:for="{{item.likeusers}}" wx:for-index="sindex" wx:for-item="sitem" wx:key="{{sitem._id}}" src="{{sitem.headimg}}"></image>
                     </view>
                     <image src="../../image/home/more.png" class="liked_more"></image>
                 </view>
                 <!--评论列表-->
                 <view class="comment_list">
-                    <view wx:for="{{item.comments}}" wx:for-index="sindex" wx:for-item="sitem" class="comment_item" catchtap="reply_someone" data-index="{{index}}" data-sindex="{{sindex}}">
+                    <view wx:for="{{item.comments}}" wx:key="{{sitem._id}}" wx:for-index="sindex" wx:for-item="sitem" class="comment_item" catchtap="reply_someone" data-index="{{index}}" data-sindex="{{sindex}}">
                         <text class="comment_content">
                             <text class="{{sitem.user.me?'comment_name me':'comment_name'}}" wx:if="{{!sitem.b}}">{{sitem.user.name}}</text>
                             <text class="{{sitem.user.me?'comment_name me':'comment_name'}}" wx:else>{{sitem.user.name}}<text>本人说</text></text><text id="{{sitem.replyuser.me?'reply_user_active':'reply_user'}}" wx:if="{{sitem.replyuser}}"><text>回复</text>{{sitem.replyuser.name}}</text>：{{sitem.content}}</text>

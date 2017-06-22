@@ -7,21 +7,24 @@ Page({
    * 页面的初始数据
    */
   data: {
+    // 发表内容文字
     post_detail: '',
+    // 点击选中的图片地址
     imgUrls: [],
-    photos:[],
-    token:'58252d066e998f6bfd67f783.1528192546.4fd5cb6689941ed91bcd3d575121eb5d',
-    current_user:{
-        name:'折原临也',
-        _id:'551d812efbe78e6ec27b1049',
-        no:230,
-        me:true,
-        headimg:'http://7x2wk4.com2.z0.glb.qiniucdn.com/Fq6Uxh4S3SkNlEcAEsTLPs08QlcW-head'
-     }
+    photos: [],
+    token: '58252d066e998f6bfd67f783.1528192546.4fd5cb6689941ed91bcd3d575121eb5d',
+    current_user: {
+      name: '折原临也',
+      _id: '551d812efbe78e6ec27b1049',
+      no: 230,
+      me: true,
+      headimg: 'http://7x2wk4.com2.z0.glb.qiniucdn.com/Fq6Uxh4S3SkNlEcAEsTLPs08QlcW-head'
+    }
   },
+  // 删除选中的图片
   f_delelte_img: function (event) {
     // console.log(event.target.dataset.imgurl)
-    // 取出需要删除的值
+
     var imgurl = event.target.dataset.imgurl;
     var imgUrls = this.data.imgUrls;
     var index = imgUrls.indexOf(imgurl);
@@ -30,17 +33,18 @@ Page({
       this.setData({ imgUrls: imgUrls });
     }
   },
+  // 发布动态
   f_submit_post: function () {
-    // 点击发布按钮的时候 触发事件
-    console.log(this.data.post_detail)
-    console.log(this.data.imgUrls)
+
+    //console.log(this.data.post_detail)
+    // console.log(this.data.imgUrls)
 
     var current_user = {
       name: 'dengchao',
       headimg: 'http://7x2wk4.com2.z0.glb.qiniucdn.com/Fi0cblQY3pt2sAmWjxUdYq-wYBhv-head'
     }
     var content = this.data.post_detail;
-    var imgUrls = this.data.imgUrls,that=this;
+    var imgUrls = this.data.imgUrls, that = this;
     if (!content && !this.data.imgUrls.length) {
       wx.showToast({
         title: '发布内容不能为空',
@@ -48,140 +52,138 @@ Page({
         image: '/images/closeBtn.png',
         duration: 1000,
         mask: true,
-        success: function (res) { },
-        fail: function (res) { },
-        complete: function (res) { },
       })
       return;
-    }else{
+    } else { // 有内容的情况下
       wx.showLoading({
-          title: '发布中',
+        title: '发布中',
       })
-      if(imgUrls.length){
+      if (imgUrls.length) {  //发表动态有图片的情况下
         wx.request({
-          url: app.data.url+'qiniu',
+          url: app.data.url + 'qiniu',
           data: {},
           method: 'GET', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
           // header: {}, // 设置请求的 header
-          success: function(res){
-            var token=res.data.token;
+          success: function (res) {
+            var token = res.data.token;
             console.log(imgUrls.length)
-            that.f_upload(imgUrls,0,imgUrls.length,token,that)
+            that.f_upload(imgUrls, 0, imgUrls.length, token, that)
           }
         })
-      }else{
+      } else {  //动态在无图的情况下
         wx.showLoading({
-            title: '发布中',
+          title: '发布中',
         })
         wx.request({
-            url: app.data.url+'feed/create',
-            data: {
-              access_token:that.data.token,
-              userid:that.data.current_user._id,
-              content:that.data.post_detail,
-            },
-            method: 'GET', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
-            // header: {}, // 设置请求的 header
-            success: function(res){
-              // success
-              if(res.data.feed){
-                wx.showToast({
-                  title: '发布成功',
-                  icon: 'success',
-                  duration: 1000
-                })
-                app.data.item=res.data.feed;
-                app.data.item=res.data.feed;
-                app.data.item.comments=[];
-                app.data.item.likeusers=[];
-                console.log(app.data.item)
-                setTimeout(function(){
-                  wx.reLaunch({
-                    url: '../../pages/home/home'
-                  })
-                },1000)
-              }
-            },
-            fail: function() {
-              // fail
+          url: app.data.url + 'feed/create',
+          data: {
+            access_token: that.data.token,
+            userid: that.data.current_user._id,
+            content: that.data.post_detail,
+          },
+          method: 'GET', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
+          // header: {}, // 设置请求的 header
+          success: function (res) {
+            // success
+            if (res.data.feed) {
               wx.showToast({
-                title: '发布失败，请重试',
+                title: '发布成功',
                 icon: 'success',
                 duration: 1000
               })
-            },
-            complete: function() {
-              // complete
+              // 发布的帖子的详情数据 app.data.item
+              app.data.item = res.data.feed;
+              app.data.item.comments = [];
+              app.data.item.likeusers = [];
+      console.log("app.data.item")
+console.log(app.data.item)
+              setTimeout(function () {
+                wx.reLaunch({
+                  url: '../../pages/home/home'
+                })
+              }, 1000)
             }
-          })
+          },
+          fail: function () {
+            // fail
+            wx.showToast({
+              title: '发布失败，请重试',
+              icon: 'success',
+              duration: 1000
+            })
+          },
+          complete: function () {
+            // complete
+          }
+        })
       }
     }
   },
   //上传图片，上传成功后发帖
-  f_upload:function(filePath,j,k,token,that){
+  f_upload: function (filePath, j, k, token, that) {
     qiniuUploader.upload(filePath[j], (res) => {
-        that.data.photos.push({
-          type:0,
-          large:res.imageURL+'-large',
-          thumbnail:res.imageURL+'-thumbnail',
-          width:1920,
-          height:1080
-        })
-        j++;
-        console.log(filePath,j,k,token,that)
-        if(j<k){
-            that.f_upload(filePath,j,k,token,that)
-        }else{
-          console.log(that.data.photos)
-          var data=new Object();
-          data['access_token']=that.data.token;
-          data['userid']=that.data.current_user._id;
-          data['content']=that.data.post_detail;
-          for(var i=0;i<that.data.photos.length;i++){
-            data['photos-'+i+'.large']=that.data.photos[i].large;
-            data['photos-'+i+'.thumbnail']=that.data.photos[i].thumbnail;
-            data['photos-'+i+'.width']=that.data.photos[i].width;
-            data['photos-'+i+'.height']=that.data.photos[i].height;
-            data['photos-'+i+'.type']=that.data.photos[i].type
-          }
-          console.log(data)
-          wx.request({
-            url: app.data.url+'feed/create',
-            data: data,
-            method: 'GET', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
-            // header: {}, // 设置请求的 header
-            success: function(res){
-              // success
-               if(res.data.feed){
-                wx.showToast({
-                  title: '发布成功',
-                  icon: 'success',
-                  duration: 1000
-                })
-                app.data.item=res.data.feed;
-                app.data.item.comments=[];
-                app.data.item.likeusers=[];
-                console.log(app.data.item)
-                setTimeout(function(){
-                  wx.reLaunch({
-                    url: '../../pages/home/home'
-                  })
-                },1000) 
-              }
-            },
-            fail: function() {
-              // fail
+      that.data.photos.push({
+        type: 0,
+        large: res.imageURL + '-large',
+        thumbnail: res.imageURL + '-thumbnail',
+        width: 1920,
+        height: 1080
+      })
+      j++;
+      console.log(filePath, j, k, token, that)
+      if (j < k) {
+        that.f_upload(filePath, j, k, token, that)
+      } else {
+        console.log(that.data.photos)
+        var data = new Object();
+        data['access_token'] = that.data.token;
+        data['userid'] = that.data.current_user._id;
+        data['content'] = that.data.post_detail;
+        for (var i = 0; i < that.data.photos.length; i++) {
+          data['photos-' + i + '.large'] = that.data.photos[i].large;
+          data['photos-' + i + '.thumbnail'] = that.data.photos[i].thumbnail;
+          data['photos-' + i + '.width'] = that.data.photos[i].width;
+          data['photos-' + i + '.height'] = that.data.photos[i].height;
+          data['photos-' + i + '.type'] = that.data.photos[i].type
+        }
+        console.log(data)
+        wx.request({
+          url: app.data.url + 'feed/create',
+          data: data,
+          method: 'GET', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
+          // header: {}, // 设置请求的 header
+          success: function (res) {
+            // success
+            if (res.data.feed) {
               wx.showToast({
-                title: '发布失败，请重试',
+                title: '发布成功',
                 icon: 'success',
                 duration: 1000
               })
-            },
-            complete: function() {
-              // complete
+              app.data.item = res.data.feed;
+              app.data.item.comments = [];
+              app.data.item.likeusers = [];
+              console.log(app.data.item)
+              setTimeout(function () {
+                wx.reLaunch({
+                  url: '../../pages/home/home'
+                })
+              }, 1000)
             }
-          })
-        }
+          },
+          fail: function () {
+            // fail
+            wx.showToast({
+              title: '发布失败，请重试',
+              icon: 'success',
+              duration: 1000
+            })
+          },
+          complete: function () {
+            // complete
+          }
+        })
+      }
     }, (error) => {
       wx.showToast({
         title: '上传失败，请重试',
@@ -192,7 +194,7 @@ Page({
         region: 'ECN',
         domain: 'http://7x2wk4.com2.z0.glb.qiniucdn.com/',
         uptoken: token,
-    })
+      })
   },
   f_post_input: function (ev) {
     //console.log(ev.detail.value);
@@ -205,7 +207,7 @@ Page({
   f_preview_img: function (ev) {
     var imgUrl = ev.currentTarget.dataset.imgurl;
     var that = this;
-    console.log(imgUrl,that.data.imgUrls)
+    console.log(imgUrl, that.data.imgUrls)
     wx.previewImage({
       current: imgUrl,
       urls: that.data.imgUrls,

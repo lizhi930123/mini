@@ -26,9 +26,18 @@ Page({
      comments_pagemore:false,
      comments:[],
   },
+  // 查看帖子详情
+  view_detail:function(event) {
+    var feed_id = event.target.dataset.feedid;
+    var index = event.target.dataset.index;
+    //console.log(feed_id)
+    wx.navigateTo({
+      url: '../../pages/details/details?feed_id='+feed_id+"&index="+index
+    })
+  },
   //切换发贴
   check_publish:function(){
-    console.log(1)
+    //console.log(1)
     app.data.items=this.data.items;
     wx.navigateTo({
       url:'../../pages/publish/publish'
@@ -36,7 +45,7 @@ Page({
   },
   //切换我的主页
   check_mainpage: function () {
-    console.log(2)
+    // console.log(2)
     wx.navigateTo({
       url: '../../pages/mainpage/mainpage'
     })
@@ -85,6 +94,7 @@ Page({
     console.log(event)
     var index=event.target.dataset.index,
     sindex=event.target.dataset.sindex;
+
     var photo=[];
     for(var i=0;i<this.data.items[index].photos.length;i++){
       photo.push(this.data.items[index].photos[i].large)
@@ -273,7 +283,6 @@ close_word:function(){
         // header: {}, // 设置请求的 header
         success: function(res){
           // success
-          console.log()
           if(res.data.result==1){
             that.data.items[index].likeusers.unshift(that.data.current_user);
             wx.showToast({
@@ -309,10 +318,9 @@ close_word:function(){
   },
   //初始化
   onLoad: function(){
-    console.log(1)
       var that=this;
       that.data.date=new Date().getTime();
-      console.log(Page)
+      //console.log(Page)
       wx.request({
         url: app.data.url+'feed/feeds_by_room',
         data: {
@@ -326,7 +334,12 @@ close_word:function(){
           // success
           var items=res.data.items,newTime=new Date().getTime();
           that.data.pagemore=res.data.pagemore;
+
+          console.log("HomePage Onload : items")
           console.log(items)
+
+          // 如果所有帖子中不存在我发的贴  那么将该贴加入数组中
+          // 如果该贴已经添加成功 那么放弃该操作
           if(app.data.item){
             for(var i=0;i<items.length;i++){
               if(items[i]._id==app.data.item._id){
@@ -339,6 +352,7 @@ close_word:function(){
               }
             }
           }
+          // 修改时间的操作
           items=app.checktime(items,app,newTime);
           // items[9].comments[0].b=1;
           that.setData({
@@ -355,4 +369,85 @@ close_word:function(){
         }
       })
   }, 
+
+  onShow:function() {
+    // 从详情列表返回的时候 加载新添加的评论 和 点赞记录
+    console.log("--------onShow")
+
+    console.log("-----同步点赞记录 null表示没有--------")
+    console.log(app.data.likeduser);
+
+    // 当前帖子的索引
+    var index = app.data.detail_index;
+
+    // 第一次的时候 不用修改数据
+    // 没有做任何修改的时候 也不用加载数据
+    if (app.data.likeduser) {
+      console.log("修改数据")
+
+      
+      // 点赞变成true 还是false
+      var liked = app.data.likeduser.liked;
+      // 当前用户
+      var current_user = this.data.current_user;
+
+      // 利用索引index 从 当前所有帖子中 找到 点赞贴 
+
+      // 如果用户点赞从false变成true, 添加点赞数据
+      if (liked) {
+        this.data.items[index].likeusers.unshift(current_user);
+        this.data.items[index].liked = true;
+      } else { //用户取消赞
+
+        // 删除current_user点赞用户数据
+        var length = this.data.items[index].likeusers.length
+        for (var i = 0; i < length; i++) {
+          if (current_user._id == this.data.items[index].likeusers[i]._id) {
+            this.data.items[index].likeusers.splice(i, 1);
+            break;
+          }
+        }
+        this.data.items[index].liked = false;
+      }
+
+      app.data.likeduser = null;
+      app.data.detail_index = -1;
+
+      console.log(this.data.items)
+      this.setData({
+        items: this.data.items
+      })
+      
+    } //end if
+
+
+    // 同步评论记录 数组为空表示没有
+    // 从详情页同步评论记录
+    var comments = app.data.comments;
+    if (comments.length) {
+      //console.log(comments);
+      
+      // 这样添加的评论数据 会放在尾部
+      this.data.items[index].comments = this.data.items[index].comments.concat(comments);
+
+      // 添加评论数据 修改数据项
+      
+      /* 新评论放在首部
+      var commentsArr = this.data.items[index].comments;
+      for (var i = 0; i < comments.length; i ++) {
+        commentsArr.unshift(comments[i]);
+      }
+      this.data.items[index].comments = commentsArr;
+      */
+      this.setData({
+        items: this.data.items
+      })
+  
+
+      // 置空数据
+      app.data.detail_index = -1;
+      app.data.comments = [];
+
+    }
+  }
 })
