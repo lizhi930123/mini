@@ -1,8 +1,3 @@
 {
-    "backgroundTextStyle":"light",
-    "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "名朋角色扮演",
-    "navigationBarTextStyle":"#000",
-    "enablePullDownRefresh":true,
-    "backgroundColor":"#000"
+    
 }

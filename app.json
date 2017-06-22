@@ -1,6 +1,8 @@
 {
   "pages":[
+    
     "pages/home/home",
+    "pages/mainpage/mainpage",
     "pages/publish/publish",
     "pages/grouplist/grouplist",
     "pages/msg/msg",
@@ -8,9 +10,7 @@
     "pages/details/details",
     "pages/creategroup/creategroup",
     "pages/search/search",
-    "pages/index/index",
-    "pages/mainpage/mainpage"
-    
+    "pages/index/index"
   ],
   "window":{
     "backgroundTextStyle":"light",

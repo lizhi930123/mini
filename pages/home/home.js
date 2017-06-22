@@ -34,6 +34,13 @@ Page({
       url:'../../pages/publish/publish'
     })
   },
+  //切换我的主页
+  check_mainpage: function () {
+    console.log(2)
+    wx.navigateTo({
+      url: '../../pages/mainpage/mainpage'
+    })
+  },
   //获取全部评论
   get_all_comments:function(event){
     var i=1,id=event.target.dataset.id,index=event.target.dataset.index;
@@ -174,7 +181,7 @@ Page({
       wx.request({
           url: 'http://test.mrpyq.com//api/feed/feeds_by_room',
           data: {
-              access_token:this.data.token,
+              access_token:that.data.token,
               page:that.data.pagenumber,
               t:that.data.date
           },

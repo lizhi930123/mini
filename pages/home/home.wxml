@@ -7,7 +7,7 @@
     <image src="../../image/home/ball.png" catchtap></image>
     <view class="fatie"><image src="../../image/home/fatie.png" bindtap="check_publish"></image></view>
     <view class="quanzi"><image src="../../image/home/quanzi.png"></image></view>
-    <view class="dongtai"><image src="../../image/home/dongtai.png"></image></view>
+    <view class="dongtai"><image src="../../image/home/dongtai.png" bindtap="check_mainpage"></image></view>
 </view>
 <!--评论框-->
 <view class="word_input" wx:if="{{word_input}}">
@@ -27,7 +27,7 @@
         </view>
     </view>
     <block wx:for="{{items}}">
-        <view class="item_container">
+        <view class="item_container" style="margin-top:{{index==0?'0':'16rpx'}}">
             <image src="{{item.user.headimg}}" class="item_headimg"></image>
             <!--帖子容器-->
             <view class="item_box">
@@ -46,7 +46,7 @@
                     <image src="../../image/home/comment.png" class="comment" catchtap="get_word" data-index="{{index}}"></image>
                     <image src="{{item.liked?'../../image/home/liked.png':'../../image/home/like.png'}}" class="liked" bindtap="f_like" data-index="{{index}}"></image>
                 </view>
-                <view class="line"></view>
+                <view class="line" wx:if="{{item.comments.length || item.likeusers.length}}"></view>
                 <!--点赞列表-->
                 <view class="likeuser_list" wx:if="{{item.likeusers.length}}">
                     <text class="zan">赞</text>

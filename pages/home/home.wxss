@@ -2,6 +2,7 @@ page,.container{
     width:100%;
     height:100%;
     position: relative;
+    background:#f4f4f4;
 }
 .bg{
     position: relative;
@@ -144,6 +145,8 @@ page,.container{
     float: left;
     min-height:100rpx;
     margin-top:60rpx;
+    background:#fff;
+   padding:40rpx 0 30rpx 0;
 }
 .item_headimg{
     float:left;
@@ -187,7 +190,7 @@ page,.container{
 }
 .func_but{
     float:left;
-    height:36rpx;
+    height:46rpx;
     width:100%;
     margin-top:20rpx;
 }
@@ -195,12 +198,12 @@ page,.container{
     float:left;
     color:#b2b2b2;
     font-size:24rpx;
-    line-height: 36rpx;
+    line-height: 46rpx;
 }
 .liked{
     float:right;
-    height:36rpx;
-    width:36rpx;
+    height:46rpx;
+    width:46rpx;
     margin-right:30rpx;
 }
 .liked_more{
@@ -212,8 +215,8 @@ page,.container{
 }
 .comment{
    float:right;
-    height:36rpx;
-    width:36rpx;
+    height:46rpx;
+    width:46rpx;
     margin-right:28rpx; 
 }
 .line{
