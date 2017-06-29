@@ -1,0 +1,5 @@
+<view class="container">
+<canvas canvas-id="myCanvas"/>
+<button bindtap="saveimg" class="but">分享二维码</button>
+<text>保存图片后发给朋友，邀请加入圈子</text>
+</view>

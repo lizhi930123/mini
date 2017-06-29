@@ -5,9 +5,12 @@ var app = getApp()
 Page({
   data: {
       imagesrc:'',
+      imagewidth:'',
+      imageheight:'',
       addimage:'',
       quanzi:'',
-      name:''
+      name:'',
+      showimg:false,
   },
   //事件处理函数
   checkval:function(event){
@@ -33,6 +36,9 @@ Page({
           sourceType:type,//album 从相册选图，camera 使用相机，默认二者都有
           success:function(res){
               console.log(res)
+              wx.showLoading({
+                title: '上传中',
+              })
               var filePath=res.tempFilePaths[0];
               console.log(10)
                 wx.request({
@@ -43,8 +49,14 @@ Page({
                 success: function(res){
                     console.log(res)
                     qiniuUploader.upload(filePath, (res) => {
+                        wx.showToast({
+                          title: '上传成功',
+                          icon: 'success',
+                          duration: 1000
+                        })
                         that.setData({
-                            'imagesrc': res.imageURL+'-thumbnail',
+                            'imagesrc': res.imageURL,
+                            showimg:true
                         });
                         var ex=/^\S{2,10}$/i;
                         if(ex.exec(that.data.name)){
@@ -55,6 +67,11 @@ Page({
                         console.log(res)
                     }, (error) => {
                         console.log('error: ' + error);
+                        wx.showToast({
+                          title: '上传失败',
+                          icon: 'success',
+                          duration: 1000
+                        })
                     }, {
                         region: 'ECN',
                         domain: 'http://7x2wk4.com2.z0.glb.qiniucdn.com/',
@@ -63,6 +80,11 @@ Page({
                 },
                 fail: function() {
                     // fail
+                  wx.showToast({
+                    title: '上传失败',
+                    icon: 'success',
+                    duration: 1000
+                  })
                 },
                 complete: function() {
                     // complete
@@ -71,28 +93,6 @@ Page({
           }
       })
   },
-  //创建圈子
-  surecreate:function(){
-    var that=this;
-    if(this.data.quanzi){
-      wx.request({
-        url: app.data.url + 'circle/create',
-        data: {
-          access_token: app.data.token,
-          name:that.data.name,
-          headimg:that.data.imagesrc
-        },
-        method: 'post', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
-        header: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },  // 设置请求的 header
-        success: function (res) {
-          console.log(res)
-        }
-      })
-    }
-  },
-  //选择图片
   checkimage:function(){
     var that=this; 
     wx.showActionSheet({

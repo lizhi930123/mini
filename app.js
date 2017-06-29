@@ -3,13 +3,16 @@ App({
   data:{
     items:[],
     item:false,
-    url:'http://test.mrpyq.com/api/',
+    // url:'http://test.mrpyq.com/api/',
+    url:'http://10.10.1.3:8550/',
 
 
     // 点击查看详情details, 点赞记录和评论内容 同步到home页
     detail_index:-1,
     comments: [],
-    likeduser:null
+    likeduser:null,
+    token: 'openId_test_has_user.2222.d079c628104414892fe32a0d78ea1dab',
+    circleid:'59538e03a4081116b1d7003c'
   },
   onLaunch: function () {
     //调用API从本地缓存中获取数据

@@ -13,7 +13,7 @@ Page({
       reply_user:{},
       current_user:{
         name:'折原临也',
-        _id:'551d812efbe78e6ec27b1049',
+        _id:'55040c10fbe78e5c14de4a93',
         no:230,
         me:true,
         headimg:'http://7x2wk4.com2.z0.glb.qiniucdn.com/Fq6Uxh4S3SkNlEcAEsTLPs08QlcW-head'
@@ -22,7 +22,8 @@ Page({
      pagenumber:2,
      pagemore:true,
     //  token:'58252d066e998f6bfd67f783.1527755207.64686c25246c2232e1a2ba1597f42b89',
-    token:'58252d066e998f6bfd67f783.1528192546.4fd5cb6689941ed91bcd3d575121eb5d',
+    // token:'58252d066e998f6bfd67f783.1528192546.4fd5cb6689941ed91bcd3d575121eb5d',
+     token:'openId_test_has_user.2222.d079c628104414892fe32a0d78ea1dab',
      comments_pagemore:false,
      comments:[],
   },
@@ -129,18 +130,20 @@ Page({
     var that=this;
     if(this.data.val){
       wx.request({
-        url: app.data.url+'feed/comment',
+        url: app.data.url +'comment/create',
         data: {
           access_token:that.data.token,
           userid:that.data.current_user._id,
-          id: that.data.items[that.data.index]._id,
+          feedid: that.data.items[that.data.index]._id,
           b:that.data.self?1:0,
           content:that.data.val,
           replyuserid:that.data.reply_user._id?that.data.reply_user._id:'',
            replyuserno:that.data.reply_user._no?that.data.reply_user._no:''
         },
-        method: 'GET', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
-        // header: {}, // 设置请求的 header
+        method: 'post', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
+        header: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },  // 设置请求的 header
         success: function(res){
           // success
           console.log(res)
@@ -272,15 +275,17 @@ close_word:function(){
       var index=event.target.dataset.index;
       var that=this;
       wx.request({
-        url: app.data.url+'feed/like',
+        url: app.data.url +'like/toggle',
         data: {
           access_token:that.data.token,
           userid:that.data.current_user._id,
-          id:that.data.items[index]._id,
+          feedid:that.data.items[index]._id,
           no:that.data.current_user.no
         },
-        method: 'GET', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
-        // header: {}, // 设置请求的 header
+        method: 'post', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
+        header: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }, // 设置请求的 header
         success: function(res){
           // success
           if(res.data.result==1){
@@ -290,7 +295,8 @@ close_word:function(){
               icon: 'success',
               duration: 2000
             })
-          }else{
+            that.data.items[index].liked =true;
+          }else if(res.data.result==-1){
               for(var i=0;i<that.data.items[index].likeusers.length;i++){
                 if(that.data.current_user._id==that.data.items[index].likeusers[i]._id){
                   that.data.items[index].likeusers.splice(i,1);
@@ -302,8 +308,8 @@ close_word:function(){
                 icon: 'success',
                 duration: 2000
               })
+              that.data.items[index].liked = false;
           }
-          that.data.items[index].liked=!that.data.items[index].liked;
           that.setData({
               items:that.data.items
           })
@@ -322,21 +328,40 @@ close_word:function(){
       that.data.date=new Date().getTime();
       //console.log(Page)
       wx.request({
-        url: app.data.url+'feed/feeds_by_room',
+        url: app.data.url + 'circle/list',
+        data: {
+          access_token: this.data.token,
+          page: 1,
+        },
+        method: 'post', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
+        header: { 
+          'Content-Type': 'application/x-www-form-urlencoded' 
+        },  // 设置请求的 header
+        success: function (res) {
+          console.log(res)
+        }
+      })
+      wx.request({
+        url: app.data.url+'feed/list',
         data: {
             access_token:this.data.token,
+            circleid: app.data.circleid,
             page:1,
-            t:that.data.date
+            // t:that.data.date
         },
-        method: 'GET', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
-        // header: {}, // 设置请求的 header
+        method: 'POST', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
+        header: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }, // 设置请求的 header
         success: function(res){
           // success
           var items=res.data.items,newTime=new Date().getTime();
           that.data.pagemore=res.data.pagemore;
-
+          for(var i=0;i<items.length;i++){
+            // items[i].likeusers = [];
+            // items[i].comments=[];
+          }
           console.log("HomePage Onload : items")
-          console.log(items)
 
           // 如果所有帖子中不存在我发的贴  那么将该贴加入数组中
           // 如果该贴已经添加成功 那么放弃该操作
@@ -344,16 +369,20 @@ close_word:function(){
             for(var i=0;i<items.length;i++){
               if(items[i]._id==app.data.item._id){
                   app.data.item=false;
+                  console.log(items[i]._id,app.data.item._id,i)
                   break;
               }else if(i==items.length-1){
                   items.unshift(app.data.item);
                   app.data.item=false;
+                  console.log(11111111111)
                   break;
               }
             }
           }
           // 修改时间的操作
+          console.log(items)
           items=app.checktime(items,app,newTime);
+          console.log(items)
           // items[9].comments[0].b=1;
           that.setData({
               items:items

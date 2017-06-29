@@ -1,16 +1,17 @@
 {
   "pages":[
-    
+    "pages/share/share",
     "pages/home/home",
+    "pages/creategroup/creategroup",
+    "pages/index/index",
     "pages/mainpage/mainpage",
     "pages/publish/publish",
     "pages/grouplist/grouplist",
     "pages/msg/msg",
     "pages/likelist/likelist",
     "pages/details/details",
-    "pages/creategroup/creategroup",
-    "pages/search/search",
-    "pages/index/index"
+    "pages/search/search"
+    
   ],
   "window":{
     "backgroundTextStyle":"light",

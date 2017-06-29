@@ -15,7 +15,7 @@
             <image src="{{item.user.headimg}}" class="item_headimg"></image>
             <!--帖子容器-->
             <view class="item_box">
-                <text class="item_name">{{item.user.name}}</text>
+                <view class="item_name">{{item.user.name}}<view class="delete" bindtap="delete" data-id="{{item._id}}" data-index="{{index}}">删除</view></view>
                 <!--帖子内容-->
                 <scroll-view scroll-y class="item_content">{{item.content}}</scroll-view>
                 <!--查看全文-->

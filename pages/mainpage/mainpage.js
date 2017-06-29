@@ -35,6 +35,64 @@ Page({
       url: '../../pages/details/details?feed_id=' + feed_id,
     })
   },
+  //删除帖子
+  delete:function(event){
+    var feed_id = event.target.dataset.id, index=event.target.dataset.index,that=this;
+    console.log(feed_id)
+    wx.showModal({
+      title: '删除提示',
+      content: '确定删除该动态?',
+      showCancel: true,
+      cancelText: '取消',
+      cancelColor: 'green',
+      confirmText: '确定',
+      confirmColor: 'red',
+      success: function (res) {
+        if (res.confirm) {
+          //删除该动态
+          console.log("删除该动态")
+          wx.showLoading({
+            title: '删除动态中',
+            mask: true
+          })
+          wx.request({
+            url: app.data.url + 'feed/delete',
+            data: {
+              access_token: that.data.token,
+              id: feed_id
+            },
+            method: 'get',
+            success: function (res) {
+              //wx.hideLoading();
+              console.log(res.data)
+              wx.showToast({
+                title: '删除成功',
+                icon: 'success',
+                duration: 2000,
+              })
+              that.data.items.splice(index,1);
+              that.setData({
+                items:that.data.items
+              })
+            },
+            fail: function () {
+              wx.showToast({
+                title: '删除失败',
+                icon: 'success',
+                duration: 2000
+              })
+            }
+          })
+
+        } else if (res.cancel) {
+          //取消操作
+          console.log("你取消删除该动态")
+        }
+      },
+      fail: function (res) { },
+      complete: function (res) { },
+    })
+  },
   //事件处理函数
   get_all_comments: function (event) {
     var i = 1, id = event.target.dataset.id, index = event.target.dataset.index;

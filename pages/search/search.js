@@ -22,9 +22,11 @@ Page({
     var name=event.target.dataset.name,
     headimg=event.target.dataset.headimg,
     description=event.target.dataset.description;
+    id = event.target.dataset.id;
     app.globalData.actname=name;
     app.globalData.actdescription=description;
     app.globalData.actheadimg=headimg;
+    app.globalData.actid=id
     wx.navigateTo({
         url: '../../pages/index/index'
     })

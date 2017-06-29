@@ -12,10 +12,10 @@ Page({
     // 点击选中的图片地址
     imgUrls: [],
     photos: [],
-    token: '58252d066e998f6bfd67f783.1528192546.4fd5cb6689941ed91bcd3d575121eb5d',
+    token: 'openId_test_has_user.2222.d079c628104414892fe32a0d78ea1dab',
     current_user: {
       name: '折原临也',
-      _id: '551d812efbe78e6ec27b1049',
+      _id: '55040c10fbe78e5c14de4a93',
       no: 230,
       me: true,
       headimg: 'http://7x2wk4.com2.z0.glb.qiniucdn.com/Fq6Uxh4S3SkNlEcAEsTLPs08QlcW-head'
@@ -24,7 +24,6 @@ Page({
   // 删除选中的图片
   f_delelte_img: function (event) {
     // console.log(event.target.dataset.imgurl)
-
     var imgurl = event.target.dataset.imgurl;
     var imgUrls = this.data.imgUrls;
     var index = imgUrls.indexOf(imgurl);
@@ -35,7 +34,6 @@ Page({
   },
   // 发布动态
   f_submit_post: function () {
-
     //console.log(this.data.post_detail)
     // console.log(this.data.imgUrls)
 
@@ -60,7 +58,7 @@ Page({
       })
       if (imgUrls.length) {  //发表动态有图片的情况下
         wx.request({
-          url: app.data.url + 'qiniu',
+          url: 'http://test.mrpyq.com/api/qiniu',
           data: {},
           method: 'GET', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
           // header: {}, // 设置请求的 header
@@ -80,11 +78,13 @@ Page({
             access_token: that.data.token,
             userid: that.data.current_user._id,
             content: that.data.post_detail,
+            circleid: app.data.circleid
           },
           method: 'GET', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
           // header: {}, // 设置请求的 header
           success: function (res) {
             // success
+            console.log(res)
             if (res.data.feed) {
               wx.showToast({
                 title: '发布成功',
@@ -95,8 +95,8 @@ Page({
               app.data.item = res.data.feed;
               app.data.item.comments = [];
               app.data.item.likeusers = [];
-      console.log("app.data.item")
-console.log(app.data.item)
+               console.log("app.data.item")
+                console.log(app.data.item)
               setTimeout(function () {
                 wx.reLaunch({
                   url: '../../pages/home/home'
@@ -123,11 +123,8 @@ console.log(app.data.item)
   f_upload: function (filePath, j, k, token, that) {
     qiniuUploader.upload(filePath[j], (res) => {
       that.data.photos.push({
-        type: 0,
         large: res.imageURL + '-large',
         thumbnail: res.imageURL + '-thumbnail',
-        width: 1920,
-        height: 1080
       })
       j++;
       console.log(filePath, j, k, token, that)
@@ -139,12 +136,10 @@ console.log(app.data.item)
         data['access_token'] = that.data.token;
         data['userid'] = that.data.current_user._id;
         data['content'] = that.data.post_detail;
+        data['circleid'] = app.data.circleid;
         for (var i = 0; i < that.data.photos.length; i++) {
           data['photos-' + i + '.large'] = that.data.photos[i].large;
           data['photos-' + i + '.thumbnail'] = that.data.photos[i].thumbnail;
-          data['photos-' + i + '.width'] = that.data.photos[i].width;
-          data['photos-' + i + '.height'] = that.data.photos[i].height;
-          data['photos-' + i + '.type'] = that.data.photos[i].type
         }
         console.log(data)
         wx.request({

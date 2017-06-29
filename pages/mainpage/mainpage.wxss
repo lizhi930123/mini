@@ -140,6 +140,11 @@ page,.container{
     font-size:34rpx;
     margin-right:24rpx;
 }
+.delete{
+  float:right;
+  margin-right:20rpx;
+  color:#b2b2b2;
+}
 .item_container{
     width:100%;
     float: left;

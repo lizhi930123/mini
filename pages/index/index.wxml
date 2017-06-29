@@ -1,17 +1,17 @@
 <!--index.wxml-->
 <view class="container">
 <view class="search">
-      <view class="go_search" bindtap="f_focus">搜索你想扮演的名人</view>
+      <view class="go_search" bindtap="f_focus"><image src="../../image/index/search2.png"></image>搜索你想扮演的名人</view>
 </view>
 <view class="content"  hidden="{{content_active}}">
       <scroll-view scroll-y class="left">
       <block wx:for="{{array}}">
-      <view class="{{active[index]}}" data-index="{{index}}" bindtap="check_white">
-            {{item}}
+      <view class="{{active[index]}}" data-index="{{index}}" bindtap="check_white" data-id="{{item.id}}">
+            {{item.name}}
       </view>
       </block>
       </scroll-view>
-      <scroll-view scroll-y class="right">
+      <scroll-view scroll-y enable-back-to-top lower-threshold="50" bindscrolltolower="get_more_act" class="right">
       <block wx:for="{{items}}">
             <view class="right_item" class="info_list">
                   <view class="info_item">
@@ -20,7 +20,7 @@
                               <text>{{item.name}}</text>
                               <text>{{item.description}}</text>
                         </view>
-                        <text class="act_he" data-name="{{item.name}}" data-description="{{item.description}}" data-headimg="{{item.headimg}}" bindtap="go_act">扮演TA</text>
+                        <text class="act_he" data-id="{{item._id}}" data-name="{{item.name}}" data-description="{{item.description}}" data-headimg="{{item.headimg}}" bindtap="go_act">扮演TA</text>
                   </view>
             </view>
       </block>

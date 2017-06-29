@@ -1,6 +1,7 @@
 <view class="container">
     <view class="search">
         <view class="go_search">
+            <image src="../../image/index/search2.png"></image>
             <input type="text" placeholder="请输入角色名称" placeholder-class="input_style" bindinput="findval"/>
         </view>
         <text bindtap="search">搜索</text>
@@ -14,7 +15,7 @@
                         <text>{{item.name}}</text>
                         <text>{{item.description}}</text>
                 </view>
-                <text class="act_he" data-name="{{item.name}}" data-description="{{item.description}}" data-headimg="{{item.headimg}}" bindtap="act_he">扮演TA</text>
+                <text class="act_he" data-id="{{item._id}}" data-name="{{item.name}}" data-description="{{item.description}}" data-headimg="{{item.headimg}}" bindtap="act_he">扮演TA</text>
             </view>
         </view>
     </block>

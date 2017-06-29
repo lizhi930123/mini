@@ -6,7 +6,7 @@
   float:left;
   background: #f4f4f4;
 }
-.search>.go_search{
+.search .go_search{
   display: block;
   width:720rpx;
   height:58rpx;
@@ -15,11 +15,20 @@
   border-radius:5px;
   text-align: center;
   font-size:26rpx;
-  background:url(/image/index/search2.png) #fff no-repeat 220rpx 16rpx;
+  background:#fff;
   background-size:26rpx 26rpx;
   line-height: 58rpx;
   color:#b2b2b2;
   text-indent:28rpx;
+  position: relative;
+}
+.search .go_search image{
+  position: absolute;
+  left:220rpx;
+  display: block;
+  height:30rpx;
+  width:30rpx;
+  top:14rpx;
 }
 .left{
   float: left;

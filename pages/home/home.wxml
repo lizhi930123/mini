@@ -69,10 +69,7 @@
         <view class="comment_list">
           <view wx:for="{{item.comments}}" wx:key="{{sitem._id}}" wx:for-index="sindex" wx:for-item="sitem" class="comment_item" catchtap="reply_someone" data-index="{{index}}" data-sindex="{{sindex}}">
             <text class="comment_content">
-              <text class="{{sitem.user.me?'comment_name me':'comment_name'}}" wx:if="{{!sitem.b}}">{{sitem.user.name}}</text>
-              <text class="{{sitem.user.me?'comment_name me':'comment_name'}}" wx:else>{{sitem.user.name}}
-                <text>本人说</text>
-              </text>
+              <text class="{{sitem.user.me?'comment_name me':'comment_name'}}" wx:if="{{!sitem.b}}">{{sitem.user.name}}</text><text class="{{sitem.user.me?'comment_name me':'comment_name'}}" wx:else>{{sitem.user.name}}<text>本人说</text></text>
               <text id="{{sitem.replyuser.me?'reply_user_active':'reply_user'}}" wx:if="{{sitem.replyuser}}">
                 <text>回复</text>{{sitem.replyuser.name}}</text>：{{sitem.content}}</text>
           </view>

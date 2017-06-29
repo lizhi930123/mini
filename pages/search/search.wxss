@@ -5,18 +5,27 @@
   float:left;
   background: #f4f4f4;
 }
-.search>.go_search{
+.search .go_search{
   float: left;
   width:634rpx;
   height:58rpx;
   border:1px solid #ededed;
   margin:15rpx 15rpx;
   border-radius:5px;
-  background:url(/image/index/search2.png) #fff no-repeat 16rpx center;
+  background: #fff;
   background-size:26rpx 26rpx;
   line-height: 58rpx;
   color:#b2b2b2;
   padding-left:50rpx;
+  position: relative;
+}
+.search .go_search image{
+  display: block;
+  width:30rpx;
+  height:30rpx;
+  position: absolute;
+  left:10rpx;
+  top:14rpx;
 }
 .go_search>input{
   float: left;
