@@ -6,7 +6,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    zan_list: [1, 2, 3, 4],
+    zan_list: [],
+    me:false
   },
   f_delete_zan: function () {
     wx.showModal({
@@ -24,10 +25,8 @@ Page({
           wx.showLoading({
             title: '删除点赞记录中',
             mask: true,
-            success: function (res) { },
-            fail: function (res) { },
-            complete: function (res) { },
           })
+          
           // 处理删除的网络请求
           setTimeout(function () {
 
@@ -43,6 +42,7 @@ Page({
               complete: function (res) { },
             })
           }, 2000)
+
         } else if (res.cancel) {
           console.log('你取消了该删除操作')
         }
@@ -55,20 +55,26 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-      console.log(options)
+    //console.log(options)
 
-//     var likeusers = JSON.parse(options.likeusers);
-// console.log(likeusers)
-//     this.data.zan_list = likeusers
-//     this.setData({
-//       zan_list:likeusers
-//     });
+    var likeusers = JSON.parse(options.likeusers);
+console.log(likeusers)
+    this.data.zan_list = likeusers;
+
+    // 一定要记得 反序列化
+    var me = JSON.parse(options.me);
+   // console.log(typeof me)
+    //console.log(me)
+
+
+    this.data.me = me;
+    this.setData({
+      zan_list:likeusers,
+      me:me
+    });
 
     wx.setNavigationBarTitle({
-      title: '赞(' + 60 + ')',
-      success: function (res) { },
-      fail: function (res) { },
-      complete: function (res) { }
+      title: '赞(' + likeusers.length + ')',
     })
   },
 

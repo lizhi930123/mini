@@ -33,7 +33,7 @@ Page({
       var that=this;
       console.log(that.data.username)
       wx.request({
-        url: app.data.url+'user/search',
+        url: "http://api.mrpyq.com/user/search",
         data: {
             name:that.data.username
         },

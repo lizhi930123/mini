@@ -77,6 +77,9 @@ App({
   checktime:function(items,app,newTime){
         for(var i=0;i<items.length;i++){
             items[i].time.create=app.cheTime(items[i].time.create,newTime);
+            if (!items[i].comments) {  //如果comments不存在 在details里面的评论对象就不存在
+              continue
+            }
             for(var j=0;j<items[i].comments.length;j++){
               items[i].comments[j].time.create=app.cheTime(items[i].comments[j].time.create,newTime);
             }

@@ -26,6 +26,18 @@ Page({
      comments_pagemore:false,
      comments:[],
   },
+  f_nav_zan_list:function(event) {
+    //console.log(event.currentTarget)
+    var likeusers = event.currentTarget.dataset.likeusers;
+
+    var jsonString = JSON.stringify(likeusers);
+    var isme = event.currentTarget.dataset.isme;
+
+    wx.navigateTo({
+      url: '../../pages/likelist/likelist?likeusers=' + jsonString + "&me=" + isme
+    })
+
+  },
   // 查看帖子详情
   view_detail:function(event) {
     var feed_id = event.target.dataset.feedid;
@@ -449,5 +461,8 @@ close_word:function(){
       app.data.comments = [];
 
     }
+  },
+  onPullDownRefresh:function() {
+    console.log("refresh")
   }
 })

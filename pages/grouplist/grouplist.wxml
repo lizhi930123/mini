@@ -1,6 +1,6 @@
 <!--pages/quanzi_list/quanzi_list.wxml-->
 <view class="quanzi_container">
-  <scroll-view scroll-y style="height: 1050rpx;">
+  <scroll-view scroll-y style="height: 82%;">
     <block wx:for="{{quanziList}}" wx:key="{{index}}">
       <!--item开始 -->
       <view class="quanzi_item" bindtap="f_join_quanzi" data-qid="{{item.qid}}">

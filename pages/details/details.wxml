@@ -22,7 +22,7 @@
     <!-- 博文内容区域结束-->
     <!--博文图片区域-->
     <view class="img_area">
-      <block wx:for="{{feed.photos}}" wx:key="*this">
+      <block wx:for="{{feed.photos}}" wx:key="{{index}}">
         <image src="{{item.thumbnail}}" bindtap="f_preview_img" data-index="{{index}}"></image>
       </block>
     </view>
@@ -37,13 +37,13 @@
     <!--博文发表时间 赞评论图标结束-->
 
     <!--赞列表-->
-    <view class="zan_list">
+    <view class="zan_list" wx:if="{{feed.likeusers.length}}">
       <view class="zan_img_area">
         <block wx:for="{{feed.likeusers}}" wx:key="{{item._id}}">
           <image src="{{item.headimg}}"></image>
         </block>
       </view>
-      <text class="zan_num" bindtap="f_nav_zan_list">{{feed.stat.like}}人赞过 ＞ </text>
+      <text class="zan_num" bindtap="f_nav_zan_list">{{feed.likeusers.length}}人赞过 ＞ </text>
     </view>
     <!--赞列表结束-->
   </view>

@@ -230,8 +230,12 @@ Page({
   f_nav_zan_list: function () {
     var likeusers = this.data.feed.likeusers;
     var jsonString = JSON.stringify(likeusers);
+    
+    // 判断是否是自己 传个下一个页面 判断能否删除点赞记录
+    var me = this.data.feed.user.me;
+
     wx.navigateTo({
-      url: '../zan/zan?likeusers=' + jsonString,
+      url: '../../pages/likelist/likelist?likeusers=' + jsonString+"&me="+me
     })
   },
 
@@ -376,11 +380,21 @@ Page({
         console.log(res.data)
         var data = res.data;
 
-        that.data.items = data.items;
+        var items = data.items;
+
+        var newTime = new Date().getTime();
+        
+        items = app.checktime(items, app, newTime);
+
+        that.data.items = items;
 
         that.data.items.reverse();
 
-        that.data.feed = data.feed;
+
+        var feed = data.feed;
+        feed.time.create = app.cheTime(feed.time.create, newTime)
+
+        that.data.feed = feed;
         that.data.count = data.count;
 
         that.setData({

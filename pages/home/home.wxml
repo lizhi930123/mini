@@ -58,7 +58,7 @@
         </view>
         <view class="line" wx:if="{{item.comments.length || item.likeusers.length}}"></view>
         <!--点赞列表-->
-        <view class="likeuser_list" wx:if="{{item.likeusers.length}}">
+        <view class="likeuser_list" wx:if="{{item.likeusers.length}}" bindtap="f_nav_zan_list" data-likeusers="{{item.likeusers}}" data-isme="{{item.user.me}}">
           <text class="zan">赞</text>
           <view class="likeusers">
             <image wx:for="{{item.likeusers}}" wx:key="{{sindex}}" wx:for-index="sindex" wx:for-item="sitem" src="{{sitem.headimg}}"></image>
@@ -69,12 +69,7 @@
         <view class="comment_list">
           <view wx:for="{{item.comments}}" wx:key="{{sitem._id}}" wx:for-index="sindex" wx:for-item="sitem" class="comment_item" catchtap="reply_someone" data-index="{{index}}" data-sindex="{{sindex}}">
             <text class="comment_content">
-              <text class="{{sitem.user.me?'comment_name me':'comment_name'}}" wx:if="{{!sitem.b}}">{{sitem.user.name}}</text>
-              <text class="{{sitem.user.me?'comment_name me':'comment_name'}}" wx:else>{{sitem.user.name}}
-                <text>本人说</text>
-              </text>
-              <text id="{{sitem.replyuser.me?'reply_user_active':'reply_user'}}" wx:if="{{sitem.replyuser}}">
-                <text>回复</text>{{sitem.replyuser.name}}</text>：{{sitem.content}}</text>
+              <text class="{{sitem.user.me?'comment_name me':'comment_name'}}" wx:if="{{!sitem.b}}">{{sitem.user.name}}</text><text class="{{sitem.user.me?'comment_name me':'comment_name'}}" wx:else>{{sitem.user.name}}<text>本人说</text></text><text id="{{sitem.replyuser.me?'reply_user_active':'reply_user'}}" wx:if="{{sitem.replyuser}}"><text>回复</text>{{sitem.replyuser.name}}</text>：{{sitem.content}}</text>
           </view>
           <!--查看全部评论-->
           <text class="more_comment" data-id="{{item._id}}" data-index="{{index}}" wx:if="{{item.stat.comment>item.comments.length}}" catchtap="get_all_comments">查看全部{{item.stat.comment}}条评论</text>
